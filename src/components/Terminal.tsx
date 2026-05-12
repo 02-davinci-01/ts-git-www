@@ -220,7 +220,7 @@ export function Terminal() {
       {/* Terminal body */}
       <div
         ref={scrollRef}
-        className="flex-1 overflow-y-auto overflow-x-auto hide-scrollbar sm:show-scrollbar px-4 sm:px-6 py-4 sm:py-5 text-[12px] sm:text-[13px] leading-6"
+        className="flex-1 overflow-y-auto overflow-x-hidden sm:overflow-x-auto hide-scrollbar sm:show-scrollbar px-4 sm:px-6 py-4 sm:py-5 text-[12px] sm:text-[13px] leading-6"
       >
         <AnimatePresence mode="wait">
           {booting ? (
@@ -347,7 +347,7 @@ function Line({
     case "prompt":
       return (
         <div
-          className={`text-neutral-400 whitespace-pre terminal-line ${animClass}`}
+          className={`text-neutral-400 whitespace-pre-wrap sm:whitespace-pre terminal-line ${animClass}`}
           style={animStyle}
         >
           {line.text}
@@ -356,7 +356,7 @@ function Line({
     case "text":
       return (
         <div
-          className={`whitespace-pre text-neutral-300 ${animClass}`}
+          className={`whitespace-pre-wrap sm:whitespace-pre text-neutral-300 ${animClass}`}
           style={{ ...animStyle, minHeight: "1.5rem" }}
         >
           {line.text || ""}
@@ -365,7 +365,7 @@ function Line({
     case "title":
       return (
         <div
-          className={`text-2xl sm:text-3xl font-bold whitespace-pre tracking-tight text-neutral-900 ${animClass}`}
+          className={`text-2xl sm:text-3xl font-bold whitespace-pre-wrap sm:whitespace-pre tracking-tight text-neutral-900 ${animClass}`}
           style={animStyle}
         >
           {line.text}
@@ -374,7 +374,7 @@ function Line({
     case "bold":
       return (
         <div
-          className={`font-semibold whitespace-pre terminal-line text-neutral-800 ${animClass}`}
+          className={`font-semibold whitespace-pre-wrap sm:whitespace-pre terminal-line text-neutral-800 ${animClass}`}
           style={animStyle}
         >
           {line.text}
@@ -383,7 +383,7 @@ function Line({
     case "muted":
       return (
         <div
-          className={`text-neutral-400 whitespace-pre terminal-line ${animClass}`}
+          className={`text-neutral-400 whitespace-pre-wrap sm:whitespace-pre terminal-line ${animClass}`}
           style={animStyle}
         >
           {line.text}
@@ -401,7 +401,7 @@ function Line({
     case "accent":
       return (
         <div
-          className={`text-neutral-500 whitespace-pre terminal-line ${animClass}`}
+          className={`text-neutral-500 whitespace-pre-wrap sm:whitespace-pre terminal-line ${animClass}`}
           style={animStyle}
         >
           {line.text}
@@ -410,7 +410,7 @@ function Line({
     case "command":
       return (
         <div
-          className={`text-neutral-500 whitespace-pre terminal-line cursor-pointer hover:text-neutral-700 hover:bg-neutral-50 transition-colors duration-150 ${line.alt ? "bg-neutral-50/60" : ""} ${animClass} ${line.mobileHidden ? "hidden sm:block" : ""}`}
+          className={`text-neutral-500 whitespace-pre-wrap sm:whitespace-pre terminal-line cursor-pointer hover:text-neutral-700 hover:bg-neutral-50 transition-colors duration-150 ${line.alt ? "bg-neutral-50/60" : ""} ${animClass} ${line.mobileHidden ? "hidden sm:block" : ""}`}
           style={animStyle}
           onClick={(e) => { e.stopPropagation(); onCommand?.(line.cmd); }}
           role="button"
@@ -423,7 +423,7 @@ function Line({
     case "highlight":
       return (
         <div
-          className={`whitespace-pre terminal-line bg-neutral-50 font-medium text-neutral-700 ${animClass}`}
+          className={`whitespace-pre-wrap sm:whitespace-pre terminal-line bg-neutral-50 font-medium text-neutral-700 ${animClass}`}
           style={animStyle}
         >
           {line.text}
@@ -441,10 +441,9 @@ function Line({
     case "link":
       return (
         <div
-          className={`whitespace-pre terminal-line terminal-line-link group/link ${animClass}`}
+          className={`whitespace-pre-wrap sm:whitespace-pre terminal-line terminal-line-link group/link ${animClass}`}
           style={animStyle}
         >
-          {"  "}
           <a
             href={line.href}
             target="_blank"

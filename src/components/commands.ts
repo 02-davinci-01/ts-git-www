@@ -53,22 +53,17 @@ const COMMANDS: Record<string, () => OutputLine[]> = {
     { type: "highlight", text: "  npm i -g 02_git" },
     { type: "text", text: "" },
     { type: "text", text: "  github:" },
-    { type: "link", text: "github.com/02-davinci-01/ts_git", href: "https://github.com/02-davinci-01/ts_git" },
+    { type: "link", text: "  github.com/02-davinci-01/ts_git", href: "https://github.com/02-davinci-01/ts_git" },
     { type: "text", text: "  npm:" },
-    { type: "link", text: "npmjs.com/package/02_git", href: "https://www.npmjs.com/package/02_git" },
+    { type: "link", text: "  npmjs.com/package/02_git", href: "https://www.npmjs.com/package/02_git" },
   ],
 
   resources: () => [
     { type: "bold", text: "  references and inspiration:" },
     { type: "text", text: "" },
-    { type: "text", text: "  · gitlet — a git implementation in javascript" },
-    { type: "link", text: "maryrosecook.com/blog/post/introducing-gitlet", href: "https://maryrosecook.com/blog/post/introducing-gitlet" },
-    { type: "text", text: "" },
-    { type: "text", text: "  · git from the inside out" },
-    { type: "link", text: "maryrosecook.com/blog/post/git-from-the-inside-out", href: "https://maryrosecook.com/blog/post/git-from-the-inside-out" },
-    { type: "text", text: "" },
-    { type: "text", text: "  · git internals — pro git book" },
-    { type: "link", text: "git-scm.com/book/en/v2/Git-Internals-Plumbing-and-Porcelain", href: "https://git-scm.com/book/en/v2/Git-Internals-Plumbing-and-Porcelain" },
+    { type: "link", text: "  · gitlet — a git implementation in js", href: "https://maryrosecook.com/blog/post/introducing-gitlet" },
+    { type: "link", text: "  · git from the inside out", href: "https://maryrosecook.com/blog/post/git-from-the-inside-out" },
+    { type: "link", text: "  · git internals — pro git book", href: "https://git-scm.com/book/en/v2/Git-Internals-Plumbing-and-Porcelain" },
   ],
 };
 
