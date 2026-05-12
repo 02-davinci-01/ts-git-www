@@ -1,24 +1,26 @@
 "use client";
 
 import { useState, useRef, useEffect, useCallback, type KeyboardEvent } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { handleCommand, type OutputLine } from "./commands";
 import { InteractiveMode } from "./InteractiveMode";
 
-const PROMPT_PATH = "~/projects/ts_git";
+const PROMPT_PATH = "~/projects/02_git";
 const PREFIX = "ts_git";
+const BOOT_CMD = "ts_git --init";
 
 const WELCOME: OutputLine[] = [
   { type: "text", text: "" },
-  { type: "title", text: " ts_git" },
+  { type: "title", text: " 02_git" },
   { type: "text", text: "" },
   { type: "muted", text: " version control, from scratch." },
   { type: "muted", text: " written in typescript. v0.1.0" },
   { type: "text", text: "" },
   { type: "divider", text: "" },
   { type: "text", text: "" },
-  { type: "command", text: " $  ts_git help              see what's possible", cmd: "help" },
-  { type: "command", text: " $  ts_git interactive        explore git visually", cmd: "interactive", mobileHidden: true },
-  { type: "command", text: " $  ts_git about             the story", cmd: "about" },
+  { type: "command", text: " $  ts_git help             see what's possible", cmd: "help" },
+  { type: "command", text: " $  ts_git interactive      explore git visually", cmd: "interactive", mobileHidden: true },
+  { type: "command", text: " $  ts_git about            the story", cmd: "about" },
   { type: "text", text: "" },
 ];
 
@@ -44,8 +46,27 @@ export function Terminal() {
   const [, setHistIdx] = useState(-1);
   const [interactive, setInteractive] = useState(false);
   const [typing, setTyping] = useState<{ command: string; index: number } | null>(null);
+  const [booting, setBooting] = useState(true);
+  const [bootIdx, setBootIdx] = useState(-1);
   const inputRef = useRef<HTMLInputElement>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!booting) return;
+    if (bootIdx < 0) {
+      const id = setTimeout(() => setBootIdx(0), 800);
+      return () => clearTimeout(id);
+    }
+    if (bootIdx < BOOT_CMD.length - 1) {
+      const base = 80;
+      const jitter = Math.random() * 80 - 20;
+      const pause = BOOT_CMD[bootIdx] === " " ? 140 : 0;
+      const id = setTimeout(() => setBootIdx((i) => i + 1), base + jitter + pause);
+      return () => clearTimeout(id);
+    }
+    const id = setTimeout(() => setBooting(false), 600);
+    return () => clearTimeout(id);
+  }, [booting, bootIdx]);
 
   useEffect(() => {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
@@ -171,7 +192,6 @@ export function Terminal() {
                 { type: "muted", text: "  exited interactive mode" },
                 { type: "text", text: "" },
               ],
-              timestamp: Date.now(),
             },
           ]);
         }}
@@ -187,9 +207,9 @@ export function Terminal() {
       {/* Title bar */}
       <div className="flex items-center gap-2.5 pl-[18px] pr-4 h-[38px] border-b border-neutral-100 bg-neutral-50/80 select-none shrink-0">
         <div className="hidden sm:flex gap-2 items-center">
-          <div className="w-3 h-3 rounded-full bg-[#ddd] hover:bg-[#ff5f57] transition-colors duration-150 flex-shrink-0" />
-          <div className="w-3 h-3 rounded-full bg-[#ddd] hover:bg-[#febc2e] transition-colors duration-150 flex-shrink-0" />
-          <div className="w-3 h-3 rounded-full bg-[#ddd] hover:bg-[#28c840] transition-colors duration-150 flex-shrink-0" />
+          <div className="w-3 h-3 rounded-full bg-[#ff5f57] flex-shrink-0 dot-red" />
+          <div className="w-3 h-3 rounded-full bg-[#febc2e] flex-shrink-0 dot-yellow" />
+          <div className="w-3 h-3 rounded-full bg-[#28c840] flex-shrink-0 dot-green" />
         </div>
         <span className="flex-1 text-center text-[11px] text-neutral-300 tracking-[0.15em] truncate">
           visitor : {PROMPT_PATH}
@@ -202,56 +222,86 @@ export function Terminal() {
         ref={scrollRef}
         className="flex-1 overflow-y-auto overflow-x-auto hide-scrollbar sm:show-scrollbar px-4 sm:px-6 py-4 sm:py-5 text-[12px] sm:text-[13px] leading-6"
       >
-        {entries.map((entry, ei) =>
-          entry.lines.map((line, li) => (
-            <Line
-              key={`${ei}-${li}`}
-              line={line}
-              delay={li * 25}
-              animate={ei === entries.length - 1}
-              onCommand={startTyping}
-            />
-          )),
-        )}
-
-        {/* Input line — desktop */}
-        <div className="hidden sm:flex items-center mt-0.5">
-          <span className="text-neutral-300 shrink-0 select-none text-[12px]">{PROMPT_PATH} $&nbsp;</span>
-          <span className="text-neutral-500 shrink-0 select-none font-medium">{PREFIX}&nbsp;</span>
-          <div className="flex-1 relative">
-            <input
-              ref={inputRef}
-              type="text"
-              value={input}
-              onChange={(e) => { if (!typing) setInput(e.target.value); }}
-              onKeyDown={onKeyDown}
-              className="w-full bg-transparent outline-none text-[13px] leading-6 caret-transparent"
-              spellCheck={false}
-              autoComplete="off"
-              autoFocus
-              readOnly={!!typing}
-            />
-            <div
-              className="absolute inset-0 flex items-center pointer-events-none text-[13px] leading-6"
-              aria-hidden
+        <AnimatePresence mode="wait">
+          {booting ? (
+            <motion.div
+              key="boot"
+              exit={{ opacity: 0, y: -4 }}
+              transition={{ duration: 0.35, ease: "easeIn" }}
             >
-              <span className="invisible">{input}</span>
-              <span className="block-cursor" />
-            </div>
-          </div>
-        </div>
+              {/* Desktop boot */}
+              <div className="hidden sm:flex items-center mt-0.5">
+                <span className="text-neutral-300 shrink-0 select-none text-[12px]">{PROMPT_PATH} $&nbsp;</span>
+                <span className="text-neutral-500">{bootIdx >= 0 ? BOOT_CMD.slice(0, bootIdx + 1) : ""}</span>
+                <span className="block-cursor" />
+              </div>
+              {/* Mobile boot */}
+              <div className="flex sm:hidden items-center mt-0.5">
+                <span className="text-neutral-300 shrink-0 select-none text-[11px]">$&nbsp;</span>
+                <span className="text-neutral-500 text-[12px]">{bootIdx >= 0 ? BOOT_CMD.slice(0, bootIdx + 1) : ""}</span>
+                <span className="block-cursor" />
+              </div>
+            </motion.div>
+          ) : (
+            <motion.div
+              key="terminal"
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, ease: "easeOut" }}
+            >
+              {entries.map((entry, ei) =>
+                entry.lines.map((line, li) => (
+                  <Line
+                    key={`${ei}-${li}`}
+                    line={line}
+                    delay={li * 25}
+                    animate={ei === entries.length - 1}
+                    onCommand={startTyping}
+                  />
+                )),
+              )}
 
-        {/* Prompt display — mobile */}
-        <div className="flex sm:hidden items-center mt-0.5">
-          <span className="text-neutral-300 shrink-0 select-none text-[11px]">$&nbsp;</span>
-          <span className="text-neutral-500 shrink-0 select-none font-medium text-[12px]">{PREFIX}&nbsp;</span>
-          <span className="text-[12px] leading-6">{input}</span>
-          <span className="block-cursor" />
-        </div>
+              {/* Input line — desktop */}
+              <div className="hidden sm:flex items-center mt-0.5">
+                <span className="text-neutral-300 shrink-0 select-none text-[12px]">{PROMPT_PATH} $&nbsp;</span>
+                <span className="text-neutral-500 shrink-0 select-none font-medium">{PREFIX}&nbsp;</span>
+                <div className="flex-1 relative">
+                  <input
+                    ref={inputRef}
+                    type="text"
+                    value={input}
+                    onChange={(e) => { if (!typing) setInput(e.target.value); }}
+                    onKeyDown={onKeyDown}
+                    className="w-full bg-transparent outline-none text-[13px] leading-6 caret-transparent"
+                    spellCheck={false}
+                    autoComplete="off"
+                    autoFocus
+                    readOnly={!!typing}
+                  />
+                  <div
+                    className="absolute inset-0 flex items-center pointer-events-none text-[13px] leading-6"
+                    aria-hidden
+                  >
+                    <span className="invisible">{input}</span>
+                    <span className="block-cursor" />
+                  </div>
+                </div>
+              </div>
+
+              {/* Prompt display — mobile */}
+              <div className="flex sm:hidden items-center mt-0.5">
+                <span className="text-neutral-300 shrink-0 select-none text-[11px]">$&nbsp;</span>
+                <span className="text-neutral-500 shrink-0 select-none font-medium text-[12px]">{PREFIX}&nbsp;</span>
+                <span className="text-[12px] leading-6">{input}</span>
+                <span className="block-cursor" />
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
 
       {/* Mobile command grid */}
-      <div className="sm:hidden border-t border-neutral-100 select-none shrink-0">
+      {!booting && <div className="sm:hidden border-t border-neutral-100 select-none shrink-0">
         <div className="grid grid-cols-2 gap-px bg-neutral-100">
           {MOBILE_COMMANDS.map(({ label, cmd, desc }) => (
             <button
@@ -272,7 +322,7 @@ export function Terminal() {
         >
           clear
         </button>
-      </div>
+      </div>}
     </div>
   );
 }
@@ -360,7 +410,7 @@ function Line({
     case "command":
       return (
         <div
-          className={`text-neutral-500 whitespace-pre terminal-line cursor-pointer hover:text-neutral-700 hover:bg-neutral-50 transition-colors duration-150 ${animClass} ${line.mobileHidden ? "hidden sm:block" : ""}`}
+          className={`text-neutral-500 whitespace-pre terminal-line cursor-pointer hover:text-neutral-700 hover:bg-neutral-50 transition-colors duration-150 ${line.alt ? "bg-neutral-50/60" : ""} ${animClass} ${line.mobileHidden ? "hidden sm:block" : ""}`}
           style={animStyle}
           onClick={(e) => { e.stopPropagation(); onCommand?.(line.cmd); }}
           role="button"

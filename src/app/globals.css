@@ -100,6 +100,27 @@ body {
   animation: labelSlide 0.3s ease-out both;
 }
 
+/* ── Traffic light glow ─────────────────────── */
+
+.dot-red, .dot-yellow, .dot-green {
+  transition: box-shadow 0.2s ease, filter 0.2s ease;
+}
+
+.dot-red:hover {
+  box-shadow: 0 0 8px rgba(255, 95, 87, 0.45);
+  filter: brightness(1.1);
+}
+
+.dot-yellow:hover {
+  box-shadow: 0 0 8px rgba(254, 188, 46, 0.45);
+  filter: brightness(1.1);
+}
+
+.dot-green:hover {
+  box-shadow: 0 0 8px rgba(40, 200, 64, 0.45);
+  filter: brightness(1.1);
+}
+
 /* ── Terminal line hover ──────────────────────── */
 
 .terminal-line {

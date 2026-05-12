@@ -9,7 +9,7 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "ts_git — a git implementation in TypeScript",
+  title: "02_git — a git implementation in TypeScript",
   description:
     "A minimal version control system written from scratch in TypeScript. Explore branches, commits, and merges interactively.",
   keywords: [
@@ -22,16 +22,16 @@ export const metadata: Metadata = {
   ],
   authors: [{ name: "the divine hermit" }],
   openGraph: {
-    title: "ts_git — a git implementation in TypeScript",
+    title: "02_git — a git implementation in TypeScript",
     description:
       "A minimal version control system written from scratch in TypeScript. Explore branches, commits, and merges interactively.",
     type: "website",
     locale: "en_US",
-    siteName: "ts_git",
+    siteName: "02_git",
   },
   twitter: {
-    card: "summary",
-    title: "ts_git — a git implementation in TypeScript",
+    card: "summary_large_image",
+    title: "02_git — a git implementation in TypeScript",
     description:
       "A minimal version control system written from scratch in TypeScript. Explore branches, commits, and merges interactively.",
   },

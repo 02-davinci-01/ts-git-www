@@ -1,19 +1,19 @@
 export type OutputLine =
   | { type: "text" | "bold" | "muted" | "accent" | "prompt" | "ascii" | "title" | "highlight" | "divider"; text: string }
   | { type: "link"; text: string; href: string }
-  | { type: "command"; text: string; cmd: string; mobileHidden?: boolean };
+  | { type: "command"; text: string; cmd: string; mobileHidden?: boolean; alt?: boolean };
 
 const COMMANDS: Record<string, () => OutputLine[]> = {
   help: () => [
     { type: "bold", text: "  available commands:" },
     { type: "text", text: "" },
-    { type: "command", text: "  ts_git help           show this help message", cmd: "help" },
-    { type: "command", text: "  ts_git about          the story behind ts_git", cmd: "about" },
-    { type: "command", text: "  ts_git commands       list all CLI commands", cmd: "commands" },
-    { type: "command", text: "  ts_git repo           open the github repository", cmd: "repo" },
-    { type: "command", text: "  ts_git resources      references and inspiration", cmd: "resources" },
+    { type: "command", text: "  ts_git help           show this help message", cmd: "help", alt: true },
+    { type: "command", text: "  ts_git about          the story behind 02_git", cmd: "about" },
+    { type: "command", text: "  ts_git commands       list all CLI commands", cmd: "commands", alt: true },
+    { type: "command", text: "  ts_git repo           github & npm", cmd: "repo" },
+    { type: "command", text: "  ts_git resources      references and inspiration", cmd: "resources", alt: true },
     { type: "command", text: "  ts_git interactive    launch interactive visualizer", cmd: "interactive", mobileHidden: true },
-    { type: "command", text: "  ts_git whoami         who made this?", cmd: "whoami" },
+    { type: "command", text: "  ts_git whoami         who made this?", cmd: "whoami", alt: true },
     { type: "command", text: "  ts_git clear          clear the terminal", cmd: "clear" },
   ],
 
@@ -48,8 +48,14 @@ const COMMANDS: Record<string, () => OutputLine[]> = {
   ],
 
   repo: () => [
-    { type: "text", text: "  github repository:" },
+    { type: "text", text: "" },
+    { type: "bold", text: "  install:" },
+    { type: "highlight", text: "  npm i -g 02_git" },
+    { type: "text", text: "" },
+    { type: "text", text: "  github:" },
     { type: "link", text: "github.com/02-davinci-01/ts_git", href: "https://github.com/02-davinci-01/ts_git" },
+    { type: "text", text: "  npm:" },
+    { type: "link", text: "npmjs.com/package/02_git", href: "https://www.npmjs.com/package/02_git" },
   ],
 
   resources: () => [

@@ -309,13 +309,13 @@ export function InteractiveMode({ onExit }: { onExit: () => void }) {
             <button
               onClick={onExit}
               aria-label="Close"
-              className="w-3 h-3 rounded-full bg-[#ddd] hover:bg-[#ff5f57] transition-colors duration-150 cursor-pointer flex-shrink-0"
+              className="w-3 h-3 rounded-full bg-[#ff5f57] cursor-pointer flex-shrink-0 dot-red"
             />
-            <div className="w-3 h-3 rounded-full bg-[#ddd] hover:bg-[#febc2e] transition-colors duration-150 flex-shrink-0" />
-            <div className="w-3 h-3 rounded-full bg-[#ddd] hover:bg-[#28c840] transition-colors duration-150 flex-shrink-0" />
+            <div className="w-3 h-3 rounded-full bg-[#febc2e] flex-shrink-0 dot-yellow" />
+            <div className="w-3 h-3 rounded-full bg-[#28c840] flex-shrink-0 dot-green" />
           </div>
           <span className="text-[11px] text-neutral-300 tracking-[0.2em]">
-            ts_git &mdash; interactive
+            02_git &mdash; interactive
           </span>
         </div>
         <button
